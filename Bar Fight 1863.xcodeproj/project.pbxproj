@@ -7,14 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08082F6519EF7C0000981DFA /* Abe.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08082F6419EF7C0000981DFA /* Abe.atlas */; };
+		08082F6619EF7C0000981DFA /* Abe.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08082F6419EF7C0000981DFA /* Abe.atlas */; };
 		0837FEBD19E229DD00F835E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEBC19E229DD00F835E7 /* AppDelegate.swift */; };
-		0837FEBF19E229DD00F835E7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0837FEBE19E229DD00F835E7 /* GameScene.sks */; };
 		0837FEC119E229DD00F835E7 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC019E229DD00F835E7 /* GameScene.swift */; };
 		0837FEC319E229DE00F835E7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC219E229DE00F835E7 /* GameViewController.swift */; };
 		0837FEC619E229DE00F835E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0837FEC419E229DE00F835E7 /* Main.storyboard */; };
 		0837FEC819E229DE00F835E7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0837FEC719E229DE00F835E7 /* Images.xcassets */; };
 		0837FECB19E229DE00F835E7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0837FEC919E229DE00F835E7 /* LaunchScreen.xib */; };
 		0837FED719E229DE00F835E7 /* Bar_Fight_1863Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FED619E229DE00F835E7 /* Bar_Fight_1863Tests.swift */; };
+		0837FEEB19E22D4600F835E7 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0837FEEA19E22D4600F835E7 /* GameKit.framework */; };
+		083AC32D1A049C2100FB7031 /* GKLocalPlayerHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 083AC32C1A049C2100FB7031 /* GKLocalPlayerHack.m */; };
+		083AC32E1A049C2100FB7031 /* GKLocalPlayerHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 083AC32C1A049C2100FB7031 /* GKLocalPlayerHack.m */; };
+		083FE63419E2330B004D7014 /* PlayerSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083FE63319E2330B004D7014 /* PlayerSprite.swift */; };
+		083FE63519E2330B004D7014 /* PlayerSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083FE63319E2330B004D7014 /* PlayerSprite.swift */; };
+		0856CD5519FD714400BC83EB /* GameMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0856CD5419FD714400BC83EB /* GameMenu.swift */; };
+		0856CD5619FD714400BC83EB /* GameMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0856CD5419FD714400BC83EB /* GameMenu.swift */; };
+		0856CD5819FD71A700BC83EB /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0856CD5719FD71A700BC83EB /* Button.swift */; };
+		0856CD5919FD71A700BC83EB /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0856CD5719FD71A700BC83EB /* Button.swift */; };
+		086332C319FC8EF600B1C011 /* GameKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086332C219FC8EF600B1C011 /* GameKitHelper.swift */; };
+		086332C419FC8EF600B1C011 /* GameKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086332C219FC8EF600B1C011 /* GameKitHelper.swift */; };
+		08B48C0F19FDD43700C4357E /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC019E229DD00F835E7 /* GameScene.swift */; };
+		08B48C1019FDD50900C4357E /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC219E229DE00F835E7 /* GameViewController.swift */; };
+		08B48C1119FDD51000C4357E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEBC19E229DD00F835E7 /* AppDelegate.swift */; };
+		08B48C1219FDD52500C4357E /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0837FEEA19E22D4600F835E7 /* GameKit.framework */; };
+		08FA79A419E8ECE8001A8EED /* George.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08FA79A319E8ECE8001A8EED /* George.atlas */; };
+		08FA79A519E8ECE8001A8EED /* George.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08FA79A319E8ECE8001A8EED /* George.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,18 +46,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08082F6419EF7C0000981DFA /* Abe.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Abe.atlas; sourceTree = "<group>"; };
 		0837FEB719E229DD00F835E7 /* Bar Fight 1863.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bar Fight 1863.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0837FEBB19E229DD00F835E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0837FEBC19E229DD00F835E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0837FEBE19E229DD00F835E7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		0837FEC019E229DD00F835E7 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		0837FEC219E229DE00F835E7 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		0837FEC519E229DE00F835E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		0837FEC719E229DE00F835E7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		0837FEC719E229DE00F835E7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "Bar Fight 1863/Images.xcassets"; sourceTree = "<group>"; };
 		0837FECA19E229DE00F835E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		0837FED019E229DE00F835E7 /* Bar Fight 1863Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Bar Fight 1863Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0837FED519E229DE00F835E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0837FED619E229DE00F835E7 /* Bar_Fight_1863Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bar_Fight_1863Tests.swift; sourceTree = "<group>"; };
+		0837FEEA19E22D4600F835E7 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		083AC3261A049B7E00FB7031 /* Bar Fight 1863-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bar Fight 1863-Bridging-Header.h"; sourceTree = "<group>"; };
+		083AC3271A049B7E00FB7031 /* Bar Fight 1863Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bar Fight 1863Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		083AC32B1A049C2100FB7031 /* GKLocalPlayerHack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GKLocalPlayerHack.h; path = ../GKLocalPlayerHack.h; sourceTree = "<group>"; };
+		083AC32C1A049C2100FB7031 /* GKLocalPlayerHack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GKLocalPlayerHack.m; path = ../GKLocalPlayerHack.m; sourceTree = "<group>"; };
+		083FE63319E2330B004D7014 /* PlayerSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerSprite.swift; sourceTree = "<group>"; };
+		0856CD5419FD714400BC83EB /* GameMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameMenu.swift; sourceTree = "<group>"; };
+		0856CD5719FD71A700BC83EB /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		086332C219FC8EF600B1C011 /* GameKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameKitHelper.swift; sourceTree = "<group>"; };
+		08FA79A319E8ECE8001A8EED /* George.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = George.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0837FEEB19E22D4600F835E7 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B48C1219FDD52500C4357E /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				0837FEB919E229DD00F835E7 /* Bar Fight 1863 */,
+				0837FEE319E22A8A00F835E7 /* Resources */,
 				0837FED319E229DE00F835E7 /* Bar Fight 1863Tests */,
 				0837FEB819E229DD00F835E7 /* Products */,
 			);
@@ -81,13 +112,11 @@
 		0837FEB919E229DD00F835E7 /* Bar Fight 1863 */ = {
 			isa = PBXGroup;
 			children = (
-				0837FEBC19E229DD00F835E7 /* AppDelegate.swift */,
-				0837FEBE19E229DD00F835E7 /* GameScene.sks */,
+				086332C119FC8EB600B1C011 /* GameKit */,
+				0856CD5419FD714400BC83EB /* GameMenu.swift */,
 				0837FEC019E229DD00F835E7 /* GameScene.swift */,
+				083FE63319E2330B004D7014 /* PlayerSprite.swift */,
 				0837FEC219E229DE00F835E7 /* GameViewController.swift */,
-				0837FEC419E229DE00F835E7 /* Main.storyboard */,
-				0837FEC719E229DE00F835E7 /* Images.xcassets */,
-				0837FEC919E229DE00F835E7 /* LaunchScreen.xib */,
 				0837FEBA19E229DD00F835E7 /* Supporting Files */,
 			);
 			path = "Bar Fight 1863";
@@ -96,6 +125,13 @@
 		0837FEBA19E229DD00F835E7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				083AC3261A049B7E00FB7031 /* Bar Fight 1863-Bridging-Header.h */,
+				083AC3271A049B7E00FB7031 /* Bar Fight 1863Tests-Bridging-Header.h */,
+				0837FEC919E229DE00F835E7 /* LaunchScreen.xib */,
+				0837FEC419E229DE00F835E7 /* Main.storyboard */,
+				0837FEBC19E229DD00F835E7 /* AppDelegate.swift */,
+				0856CD5719FD71A700BC83EB /* Button.swift */,
+				0837FEEA19E22D4600F835E7 /* GameKit.framework */,
 				0837FEBB19E229DD00F835E7 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -116,6 +152,26 @@
 				0837FED519E229DE00F835E7 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0837FEE319E22A8A00F835E7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0837FEC719E229DE00F835E7 /* Images.xcassets */,
+				08FA79A319E8ECE8001A8EED /* George.atlas */,
+				08082F6419EF7C0000981DFA /* Abe.atlas */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		086332C119FC8EB600B1C011 /* GameKit */ = {
+			isa = PBXGroup;
+			children = (
+				086332C219FC8EF600B1C011 /* GameKitHelper.swift */,
+				083AC32B1A049C2100FB7031 /* GKLocalPlayerHack.h */,
+				083AC32C1A049C2100FB7031 /* GKLocalPlayerHack.m */,
+			);
+			name = GameKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +223,12 @@
 				TargetAttributes = {
 					0837FEB619E229DD00F835E7 = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = 6VG55764YK;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 					0837FECF19E229DE00F835E7 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -198,9 +260,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08082F6519EF7C0000981DFA /* Abe.atlas in Resources */,
+				08FA79A419E8ECE8001A8EED /* George.atlas in Resources */,
 				0837FECB19E229DE00F835E7 /* LaunchScreen.xib in Resources */,
 				0837FEC819E229DE00F835E7 /* Images.xcassets in Resources */,
-				0837FEBF19E229DD00F835E7 /* GameScene.sks in Resources */,
 				0837FEC619E229DE00F835E7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,6 +272,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08082F6619EF7C0000981DFA /* Abe.atlas in Resources */,
+				08FA79A519E8ECE8001A8EED /* George.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,8 +284,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				083AC32D1A049C2100FB7031 /* GKLocalPlayerHack.m in Sources */,
+				0856CD5819FD71A700BC83EB /* Button.swift in Sources */,
 				0837FEC119E229DD00F835E7 /* GameScene.swift in Sources */,
+				086332C319FC8EF600B1C011 /* GameKitHelper.swift in Sources */,
+				083FE63419E2330B004D7014 /* PlayerSprite.swift in Sources */,
 				0837FEC319E229DE00F835E7 /* GameViewController.swift in Sources */,
+				0856CD5519FD714400BC83EB /* GameMenu.swift in Sources */,
 				0837FEBD19E229DD00F835E7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,7 +299,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B48C1119FDD51000C4357E /* AppDelegate.swift in Sources */,
+				08B48C1019FDD50900C4357E /* GameViewController.swift in Sources */,
+				08B48C0F19FDD43700C4357E /* GameScene.swift in Sources */,
+				0856CD5919FD71A700BC83EB /* Button.swift in Sources */,
+				0856CD5619FD714400BC83EB /* GameMenu.swift in Sources */,
 				0837FED719E229DE00F835E7 /* Bar_Fight_1863Tests.swift in Sources */,
+				086332C419FC8EF600B1C011 /* GameKitHelper.swift in Sources */,
+				083FE63519E2330B004D7014 /* PlayerSprite.swift in Sources */,
+				083AC32E1A049C2100FB7031 /* GKLocalPlayerHack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,9 +424,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Bar Fight 1863/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bar Fight 1863/Bar Fight 1863-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -356,9 +441,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Bar Fight 1863/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bar Fight 1863/Bar Fight 1863-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -366,6 +457,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -377,6 +469,8 @@
 				INFOPLIST_FILE = "Bar Fight 1863Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bar Fight 1863/Bar Fight 1863Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bar Fight 1863.app/Bar Fight 1863";
 			};
 			name = Debug;
@@ -385,6 +479,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -392,6 +487,7 @@
 				INFOPLIST_FILE = "Bar Fight 1863Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Bar Fight 1863/Bar Fight 1863Tests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bar Fight 1863.app/Bar Fight 1863";
 			};
 			name = Release;
@@ -415,6 +511,7 @@
 				0837FEDC19E229DE00F835E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0837FEDD19E229DE00F835E7 /* Build configuration list for PBXNativeTarget "Bar Fight 1863Tests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +520,7 @@
 				0837FEDF19E229DE00F835E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
