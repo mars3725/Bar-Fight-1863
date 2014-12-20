@@ -11,7 +11,7 @@ import SpriteKit
 class PlayerSprite: SKSpriteNode {
     
     enum playerType: Int {
-    case Abe = 1, George }
+        case Abe = 1, George }
     let playerSpeed: CGFloat = 100
     var PunchTextures = [SKTexture]()
     var idle = SKAction()
@@ -59,8 +59,8 @@ class PlayerSprite: SKSpriteNode {
             break;
         case "up":
             if(!jumping){
-            self.physicsBody?.applyImpulse(CGVectorMake(0, 75))
-            jumping = true
+                self.physicsBody?.applyImpulse(CGVectorMake(0, 75))
+                jumping = true
             }
             break;
         case "stop":
@@ -114,7 +114,7 @@ class PlayerSprite: SKSpriteNode {
         animationState = "punching"
         var punchVar = Int(arc4random_uniform(UInt32(PunchTextures.count)))
         let punchtextureArray = NSArray(array: PunchTextures)
-
+        
         self.removeActionForKey("idle")
         self.texture = punchtextureArray.objectAtIndex(punchVar) as? SKTexture
         self.runAction(SKAction.waitForDuration(0.5), completion: {

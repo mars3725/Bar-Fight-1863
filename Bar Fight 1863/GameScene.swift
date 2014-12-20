@@ -19,6 +19,7 @@ public class GameScene: SKScene {
     var GameOver = false
     let sendPositionFrequency = 0.05
     let punchButton = SKSpriteNode(imageNamed: "Button")
+    let punchButton2 = SKSpriteNode(imageNamed: "Button")
     override public func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
@@ -30,6 +31,10 @@ public class GameScene: SKScene {
         punchButton.setScale(0.2)
         punchButton.anchorPoint = CGPointZero
         punchButton.position = CGPointMake(self.frame.minX + 10, self.frame.minY + 10)
+        
+        punchButton2.setScale(0.2)
+        punchButton2.anchorPoint = CGPointMake(1, 0)
+        punchButton2.position = CGPointMake(self.frame.maxX - 10, self.frame.minY + 10)
         
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
         self.physicsBody?.restitution = 0
@@ -46,6 +51,7 @@ public class GameScene: SKScene {
         self.addChild(noteText)
         self.addChild(gamekithelper)
         self.addChild(punchButton)
+        self.addChild(punchButton2)
         
         self.flashText("FIGHT!")
         sendPlayerStats()
@@ -57,7 +63,7 @@ public class GameScene: SKScene {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
-            if !punchButton.containsPoint(location) {
+            if !punchButton.containsPoint(location) && !punchButton2.containsPoint(location) {
                 let location = touch.locationInNode(self)
                 if (location.y > self.frame.height * 0.75) {
                     currentplayer!.move("up")

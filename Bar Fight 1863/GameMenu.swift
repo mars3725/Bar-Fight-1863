@@ -31,7 +31,7 @@ class GameMenu: SKScene {
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-
+        
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.containsPoint(location){

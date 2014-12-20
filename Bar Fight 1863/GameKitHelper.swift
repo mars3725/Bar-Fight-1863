@@ -78,52 +78,52 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     func match(match: GKMatch!, didReceiveData data: NSData!, fromRemotePlayer player: GKPlayer!) {
         var messageRecieved = NSKeyedUnarchiver.unarchiveObjectWithData(data) as Message
         if (self.scene != nil) {
-        switch (messageRecieved.type) {
-        case .RandomNumberMessage:
-            let otherPlayersNumber = messageRecieved.content as Int
-            println("Random Number Recieved is: \(otherPlayersNumber)")
-            println("My Random Number is: \(myRandomNumber)")
-            if (myRandomNumber > otherPlayersNumber) {
-                println("I am player 1")
-                let parentScene = self.scene as GameMenu
-                parentScene.startGame(0)
-            } else if (myRandomNumber < otherPlayersNumber) {
-                println("I am player 2")
-                let parentScene = self.scene as GameMenu
-                parentScene.startGame(1)
-            } else {
-                //try again
-                println("Random Numbers were the same. Trying again")
-                sendRandomNumber()
-            }
-            break
-            
-        case .EnemyStatusMessage:
-            let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as NSData) as MyStats
-            let parentScene = self.scene as GameScene
-            let otherPlayer = parentScene.getOtherPlayer()
-            
-            otherPlayer.position = otherPlayersStats.position
-            
-//            if (lastpositionX > lastpositionX) {
-//                otherPlayer.xScale = otherPlayer.scale
-//            } else {                                                  <-----Working on flipping image
-//                otherPlayer.xScale = -otherPlayer.scale
-//            }
-            lastpositionX = otherPlayer.position.x
-            
-            if (otherPlayersStats.yVelocity == nil) {
-                if (otherPlayersStats.punching && !otherPlayer.punching) { //more animations later
-                    otherPlayer.punch()
+            switch (messageRecieved.type) {
+            case .RandomNumberMessage:
+                let otherPlayersNumber = messageRecieved.content as Int
+                println("Random Number Recieved is: \(otherPlayersNumber)")
+                println("My Random Number is: \(myRandomNumber)")
+                if (myRandomNumber > otherPlayersNumber) {
+                    println("I am player 1")
+                    let parentScene = self.scene as GameMenu
+                    parentScene.startGame(0)
+                } else if (myRandomNumber < otherPlayersNumber) {
+                    println("I am player 2")
+                    let parentScene = self.scene as GameMenu
+                    parentScene.startGame(1)
+                } else {
+                    //try again
+                    println("Random Numbers were the same. Trying again")
+                    sendRandomNumber()
                 }
-            } else {
-                otherPlayer.physicsBody!.velocity.dy = otherPlayersStats.yVelocity!
+                break
+                
+            case .EnemyStatusMessage:
+                let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as NSData) as? MyStats
+                
+                if let parentScene = self.scene as? GameScene {
+                    let otherPlayer = parentScene.getOtherPlayer()
+                    
+                    otherPlayer.position = otherPlayersStats!.position
+                    otherPlayer.physicsBody?.velocity = otherPlayersStats!.velocity
+                    if (otherPlayersStats!.punching && !otherPlayer.punching) { //more animations later
+                        otherPlayer.punch()
+                    }
+                    //            if (lastpositionX > lastpositionX) {
+                    //                otherPlayer.xScale = otherPlayer.scale
+                    //            } else {                                                  <-----Working on flipping image
+                    //                otherPlayer.xScale = -otherPlayer.scale
+                    //            }
+                    lastpositionX = otherPlayer.position.x
+                    
+                } else {
+                    println("Hmmm???")
+                }
+                break
+                
+            default:
+                break
             }
-            break
-            
-        default:
-            break
-        }
         } else {
             println("Parent scene equal to nil!")
         }
@@ -149,7 +149,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
             //scene.size = skView!.bounds.size
             (self.parent as GameScene).gamekithelper.match?.disconnect()
             if self.scene!.view != nil {
-            self.scene!.view!.presentScene(scene, transition: SKTransition.fadeWithDuration(0.5))
+                self.scene!.view!.presentScene(scene, transition: SKTransition.fadeWithDuration(0.5))
             }
         }
     }
@@ -175,11 +175,11 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         let player = parentScene.currentplayer
         
         if (player!.jumping) {
-            let unEncodedContent = MyStats(position: player!.position,yVelocity: player!.physicsBody!.velocity.dy)
+            let unEncodedContent = MyStats(position: player!.position, velocity: player!.physicsBody!.velocity, punching: false)
             messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
             
         } else {
-            let unEncodedContent = MyStats(position: player!.position, punching: player!.punching)
+            let unEncodedContent = MyStats(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
             messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
         }
         
@@ -237,19 +237,13 @@ class Message: NSObject, NSCoding {
 class MyStats: NSObject, NSCoding {
     var position = CGPoint()
     var punching = Bool()
-    var yVelocity = CGFloat?()
+    var velocity = CGVector(dx: 0,dy: 0)
     
-        init(position: CGPoint, yVelocity: CGFloat) { //jumping init
-            self.position = position
-            self.yVelocity = yVelocity
-            self.punching = false
-        }
-    
-        init(position: CGPoint, punching: Bool) { //not jumping init (could be punching)
-            self.position = position
-            self.yVelocity = nil
-            self.punching = punching
-        }
+    init(position: CGPoint, velocity: CGVector, punching: Bool) { //jumping init
+        self.position = position
+        self.velocity = velocity
+        self.punching = punching
+    }
     
     override init() {
         
@@ -258,13 +252,13 @@ class MyStats: NSObject, NSCoding {
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeCGPoint(position, forKey: "position")
         aCoder.encodeBool(punching, forKey: "punching")
-        aCoder.encodeObject(yVelocity, forKey: "yVelocity")
+        aCoder.encodeCGVector(velocity, forKey: "velocity")
     }
     
     required init(coder aDecoder: NSCoder) {
         position = aDecoder.decodeCGPointForKey("position")
         punching = aDecoder.decodeBoolForKey("punching")
-        yVelocity = aDecoder.decodeObjectForKey("yVelocity") as? CGFloat
-
+        velocity = aDecoder.decodeCGVectorForKey("velocity")
+        
     }
 }
