@@ -12,10 +12,10 @@ class PlayerSprite: SKSpriteNode {
     
     enum playerType: Int {
         case Abe = 1, George }
-    let playerSpeed: CGFloat = 100
+    let playerSpeed: CGFloat = 180
     var PunchTextures = [SKTexture]()
     var idle = SKAction()
-    let scale:CGFloat = 1.25
+    let scale:CGFloat = 1.5
     var jumping = false
     var punching = false
     var animationState = String()
@@ -59,7 +59,7 @@ class PlayerSprite: SKSpriteNode {
             break;
         case "up":
             if(!jumping){
-                self.physicsBody?.applyImpulse(CGVectorMake(0, 75))
+                self.physicsBody?.applyImpulse(CGVectorMake(0, 100))
                 jumping = true
             }
             break;

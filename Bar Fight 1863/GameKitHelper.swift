@@ -109,11 +109,11 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
                     if (otherPlayersStats!.punching && !otherPlayer.punching) { //more animations later
                         otherPlayer.punch()
                     }
-                    //            if (lastpositionX > lastpositionX) {
-                    //                otherPlayer.xScale = otherPlayer.scale
-                    //            } else {                                                  <-----Working on flipping image
-                    //                otherPlayer.xScale = -otherPlayer.scale
-                    //            }
+                                if otherPlayer.physicsBody!.velocity.dx.isSignMinus {
+                                    otherPlayer.xScale = -otherPlayer.scale
+                                } else {
+                                    otherPlayer.xScale = otherPlayer.scale
+                                }
                     lastpositionX = otherPlayer.position.x
                     
                 } else {
