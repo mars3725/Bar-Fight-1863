@@ -46,7 +46,10 @@ class PlayerSprite: SKSpriteNode {
                 let sprite = node as SKSpriteNode
                 sprite.physicsBody?.applyForce(CGVectorMake(-self.playerSpeed, 0))
             })
-            self.xScale = -scale
+            if !self.xScale.isSignMinus {
+                (self.scene as GameScene).gamekithelper.sendFlipMessage()
+                self.xScale = -scale
+            }
             self.runAction(SKAction.repeatActionForever(moveleft), withKey: "move left")
             break;
         case "right":
@@ -54,11 +57,14 @@ class PlayerSprite: SKSpriteNode {
                 let sprite = node as SKSpriteNode
                 sprite.physicsBody?.applyForce(CGVectorMake(self.playerSpeed, 0))
             })
-            self.xScale = scale
+            if self.xScale.isSignMinus {
+                (self.scene as GameScene).gamekithelper.sendFlipMessage()
+                self.xScale = scale
+            }
             self.runAction(SKAction.repeatActionForever(moveright), withKey: "move right")
             break;
         case "up":
-            if(!jumping){
+            if !jumping {
                 self.physicsBody?.applyImpulse(CGVectorMake(0, 100))
                 jumping = true
             }
@@ -129,7 +135,7 @@ class PlayerSprite: SKSpriteNode {
         self.physicsBody?.allowsRotation = true
         self.removeActionForKey("idle")
         var angle = CGFloat()
-        if(direction == "right") {
+        if direction == "right" {
             angle = CGFloat(-M_PI_2)
         } else {
             angle = CGFloat(M_PI_2)

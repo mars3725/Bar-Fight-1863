@@ -36,7 +36,7 @@ class Button: SKLabelNode {
     }
     
     func center(scene: SKScene?) {
-        if (scene != nil) {
+        if scene != nil {
      self.position = CGPointMake(self.scene!.frame.midX, self.scene!.frame.midY)
         } else {
             println("Cant center Labelnode.Unknown Scene")
@@ -48,7 +48,7 @@ class Button: SKLabelNode {
         var hitbox = CGRectMake(self.frame.origin.x , self.frame.origin.y, self.frame.width + threshhold, self.frame.height + threshhold)
         hitbox.offset(dx: -threshhold/2, dy: +threshhold/2)
         
-        if (hitbox.contains(p)) {
+        if hitbox.contains(p) {
             return true
         } else {
             return false

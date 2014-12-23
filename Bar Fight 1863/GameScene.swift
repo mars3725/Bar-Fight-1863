@@ -39,6 +39,7 @@ public class GameScene: SKScene {
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: self.frame)
         self.physicsBody?.restitution = 0
         self.physicsBody?.categoryBitMask = 1
+        self.physicsBody?.friction = 0.4
         self.physicsWorld.gravity = CGVectorMake(0, -8.5)
         
         noteText.fontName = "Futura-CondensedExtraBold"
@@ -65,14 +66,14 @@ public class GameScene: SKScene {
             let location = touch.locationInNode(self)
             if !punchButton.containsPoint(location) && !punchButton2.containsPoint(location) {
                 let location = touch.locationInNode(self)
-                if (location.y > self.frame.height * 0.75) {
+                if location.y > self.frame.height * 0.75 {
                     currentplayer!.move("up")
                 } else {
-                    if (location.x < self.frame.width/2) {
+                    if location.x < self.frame.width/2 {
                         
                         currentplayer!.move("left")
                     }
-                    else if (location.x > self.frame.width/2){
+                    else if location.x > self.frame.width/2 {
                         currentplayer!.move("right")
                     }
                 }
@@ -93,15 +94,15 @@ public class GameScene: SKScene {
     override public func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         
-        if (currentplayer!.physicsBody?.velocity.dy == 0 && currentplayer!.jumping) {
+        if  currentplayer!.physicsBody?.velocity.dy == 0 && currentplayer!.jumping {
             currentplayer!.jumping = false
-        } else if (!(currentplayer!.physicsBody?.velocity.dy == 0) && !currentplayer!.jumping) {
+        } else if !(currentplayer!.physicsBody?.velocity.dy == 0) && !currentplayer!.jumping {
             currentplayer!.jumping = true
         }
         
         let otherPlayer = getOtherPlayer()
         
-        if((currentplayer?.intersectsNode(otherPlayer)) == true){
+        if currentplayer?.intersectsNode(otherPlayer) == true {
             attackCheck()
         }
     }
@@ -126,29 +127,29 @@ public class GameScene: SKScene {
         let enemy = getOtherPlayer()
         var direction = NSString()
         
-        if((currentplayer!.position.x - enemy.position.x).isSignMinus) {
+        if (currentplayer!.position.x - enemy.position.x).isSignMinus {
             direction = "right"
         } else {
             direction = "left"
         }
         
-        if(currentplayer!.punching) {
+        if currentplayer!.punching {
             noteText.alpha = 1
             let name = enemy.name!
             noteText.text = "\(name) Wins!"
             enemy.die(false, hitFromDirection: direction)
-        } else if(enemy.punching) {
+        } else if enemy.punching {
             noteText.alpha = 1
             let name = currentplayer!.name!
             noteText.text = "\(name) Wins!"
             self.currentplayer!.die(false, hitFromDirection: direction)
-        } else if (currentplayer!.punching && enemy.punching) {
+        } else if  currentplayer!.punching && enemy.punching {
             flashText("Block")
         }
     }
     
     func getOtherPlayer() -> PlayerSprite{
-        if(playerIndex == 0) {
+        if playerIndex == 0 {
             return playerArray.objectAtIndex(1) as PlayerSprite
         } else {
             return playerArray.objectAtIndex(0) as PlayerSprite
@@ -175,7 +176,7 @@ public class GameScene: SKScene {
         
         gamekithelper.sendPosition()
         self.runAction(SKAction.waitForDuration(sendPositionFrequency), completion: {
-            if (!self.GameOver){
+            if !self.GameOver {
                 self.sendPlayerStats()
             }
         })

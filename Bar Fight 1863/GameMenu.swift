@@ -36,7 +36,7 @@ class GameMenu: SKScene {
             let location = touch.locationInNode(self)
             if self.containsPoint(location){
                 let authProbs = menuGameKitHelper.authenticateLocalPlayer()
-                if (menuGameKitHelper.localPlayer.authenticated) {
+                if menuGameKitHelper.localPlayer.authenticated {
                     menuGameKitHelper.findMatch()
                 } else {
                     println("Game Center is not enabled. Cannot Proceed, Goddamnit! Reason: \(authProbs)")

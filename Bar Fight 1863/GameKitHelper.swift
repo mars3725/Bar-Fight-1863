@@ -21,14 +21,14 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         var returnString = "Unknown"
         localPlayer.authenticateHandler = {(_viewController : UIViewController!, error : NSError!) -> Void in
             
-            if (_viewController != nil) {
+            if _viewController != nil {
                 let viewController = self.scene?.view?.window?.rootViewController
                 viewController?.presentViewController(_viewController, animated: true, completion: nil)
                 self.GameCenterEnabled = true
                 returnString = "Sucess. Player Logged in!"
                 
             }
-            else if (self.localPlayer.authenticated) {
+            else if self.localPlayer.authenticated {
                 self.GameCenterEnabled = true
                 returnString = "Sucess. Player Already Logged in"
             }
@@ -58,7 +58,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         self.match?.delegate = self
         self.players = match.players
         
-        if (self.match?.expectedPlayerCount == 0) {
+        if self.match?.expectedPlayerCount == 0 {
             println("Attempting to send random Number")
             sendRandomNumber()
         }
@@ -77,17 +77,17 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     
     func match(match: GKMatch!, didReceiveData data: NSData!, fromRemotePlayer player: GKPlayer!) {
         var messageRecieved = NSKeyedUnarchiver.unarchiveObjectWithData(data) as Message
-        if (self.scene != nil) {
+        if self.scene != nil {
             switch (messageRecieved.type) {
             case .RandomNumberMessage:
                 let otherPlayersNumber = messageRecieved.content as Int
                 println("Random Number Recieved is: \(otherPlayersNumber)")
                 println("My Random Number is: \(myRandomNumber)")
-                if (myRandomNumber > otherPlayersNumber) {
+                if myRandomNumber > otherPlayersNumber {
                     println("I am player 1")
                     let parentScene = self.scene as GameMenu
                     parentScene.startGame(0)
-                } else if (myRandomNumber < otherPlayersNumber) {
+                } else if myRandomNumber < otherPlayersNumber {
                     println("I am player 2")
                     let parentScene = self.scene as GameMenu
                     parentScene.startGame(1)
@@ -106,21 +106,23 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
                     
                     otherPlayer.position = otherPlayersStats!.position
                     otherPlayer.physicsBody?.velocity = otherPlayersStats!.velocity
-                    if (otherPlayersStats!.punching && !otherPlayer.punching) { //more animations later
+                    if otherPlayersStats!.punching && !otherPlayer.punching { //more animations later
                         otherPlayer.punch()
                     }
-                                if otherPlayer.physicsBody!.velocity.dx.isSignMinus {
-                                    otherPlayer.xScale = -otherPlayer.scale
-                                } else {
-                                    otherPlayer.xScale = otherPlayer.scale
-                                }
                     lastpositionX = otherPlayer.position.x
                     
-                } else {
-                    println("Hmmm???")
                 }
                 break
-                
+            case .EnemyFlipMessage:
+                if let parentScene = self.scene as? GameScene {
+                    let otherPlayer = parentScene.getOtherPlayer()
+                    if otherPlayer.xScale.isSignMinus {
+                        otherPlayer.xScale = otherPlayer.scale
+                    } else if !otherPlayer.xScale.isSignMinus {
+                        otherPlayer.xScale = -otherPlayer.scale
+                    }
+                }
+                break
             default:
                 break
             }
@@ -141,7 +143,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     }
     
     func match(match: GKMatch!, player: GKPlayer!, didChangeConnectionState state: GKPlayerConnectionState) {
-        if(state == .StateUnknown || state == .StateDisconnected) {
+        if state == .StateUnknown || state == .StateDisconnected {
             println("Opponents connection state unknown or disconnected. Quitting match")
             var scene = GameMenu(size: self.scene!.size)
             //self.skView?.ignoresSiblingOrder = true
@@ -164,7 +166,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Reliable, error: error)
         println("data size sent: \(packet.length)")
         
-        if (error != nil) {
+        if error != nil {
             println("error sending Random Number: \(error.debugDescription)")
         }
     }
@@ -174,20 +176,24 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         let parentScene = self.scene as GameScene
         let player = parentScene.currentplayer
         
-        if (player!.jumping) {
-            let unEncodedContent = MyStats(position: player!.position, velocity: player!.physicsBody!.velocity, punching: false)
-            messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
-            
-        } else {
-            let unEncodedContent = MyStats(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
-            messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
-        }
+        let unEncodedContent = MyStats(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
+        messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
         
         let packet = NSKeyedArchiver.archivedDataWithRootObject(messageToSend)
         var error = NSErrorPointer()
         match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Unreliable, error: error)
-        if (error != nil) {
+        if error != nil {
             println("error sending Position: \(error.debugDescription)")
+        }
+    }
+    
+    func sendFlipMessage() {
+        let message = Message(type: .EnemyFlipMessage)
+        let packet = NSKeyedArchiver.archivedDataWithRootObject(message)
+        var error = NSErrorPointer()
+        match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Reliable, error: error)
+        if error != nil {
+            println("error sending Flip Message: \(error.debugDescription)")
         }
     }
     
@@ -197,6 +203,7 @@ enum MessageType : String {
     case Default = "Default"
     case RandomNumberMessage = "RandomNumberMessage"
     case EnemyStatusMessage = "EnemyStatusMessage"
+    case EnemyFlipMessage = "EnemyFlipMessage"
     init() {
         self = .Default
     }
@@ -227,7 +234,10 @@ class Message: NSObject, NSCoding {
             self.type = MessageType.EnemyStatusMessage
             content = MyStats()
             break
-            
+        case .EnemyFlipMessage:
+            self.type = MessageType.EnemyFlipMessage
+            content = nil
+            break
         default:
             break
         }
