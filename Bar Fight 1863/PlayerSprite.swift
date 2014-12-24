@@ -23,15 +23,15 @@ class PlayerSprite: SKSpriteNode {
     convenience init(type: playerType) {
         var initTexture = SKTexture()
         
-        switch (type) {
+        switch type {
         case playerType.Abe:
             initTexture = SKTexture(imageNamed: "Abe_Punch_1")
-            break;
+            break
         case playerType.George:
             initTexture = SKTexture(imageNamed: "George_Punch_1")
-            break;
+            break
         default:
-            break;
+            break
         } //sets initial texture
         
         self.init(texture: initTexture, color: UIColor(), size: CGSize())
@@ -39,7 +39,7 @@ class PlayerSprite: SKSpriteNode {
     }
     
     func move(direction: NSString) {
-        switch (direction) {
+        switch direction {
         case "left":
             
             let moveleft = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
@@ -51,7 +51,7 @@ class PlayerSprite: SKSpriteNode {
                 self.xScale = -scale
             }
             self.runAction(SKAction.repeatActionForever(moveleft), withKey: "move left")
-            break;
+            break
         case "right":
             let moveright = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
                 let sprite = node as SKSpriteNode
@@ -62,19 +62,19 @@ class PlayerSprite: SKSpriteNode {
                 self.xScale = scale
             }
             self.runAction(SKAction.repeatActionForever(moveright), withKey: "move right")
-            break;
+            break
         case "up":
             if !jumping {
                 self.physicsBody?.applyImpulse(CGVectorMake(0, 100))
                 jumping = true
             }
-            break;
+            break
         case "stop":
             self.removeActionForKey("move left")
             self.removeActionForKey("move right")
-            break;
+            break
         default:
-            break;
+            break
         }
     }
     
@@ -95,19 +95,19 @@ class PlayerSprite: SKSpriteNode {
         
         var idleTextures = [SKTexture]()
         var Atlas = SKTextureAtlas()
-        switch (type) {
+        switch type {
         case playerType.Abe:
             Atlas = SKTextureAtlas(named: "Abe")
             idleTextures = [Atlas.textureNamed("Abe_Idle_1.png"), Atlas.textureNamed("Abe_Idle_2.png"), Atlas.textureNamed("Abe_Idle_3.png"), Atlas.textureNamed("Abe_Idle_4.png")]
             PunchTextures = [SKTexture(imageNamed: "Abe_Punch_1"), SKTexture(imageNamed: "Abe_Punch_2")]
-            break;
+            break
         case playerType.George:
             Atlas = SKTextureAtlas(named: "George")
             idleTextures = [Atlas.textureNamed("George_Idle_1.png"), Atlas.textureNamed("George_Idle_2.png"), Atlas.textureNamed("George_Idle_3.png"), Atlas.textureNamed("George_Idle_4.png")]
             PunchTextures = [SKTexture(imageNamed: "George_Punch_1"), SKTexture(imageNamed: "George_Punch_2")]
-            break;
+            break
         default:
-            break;
+            break
         } //load texture atlases and setup texture arrays (idle & punch)
         
         idle = SKAction.animateWithTextures(idleTextures, timePerFrame: 0.2)
@@ -152,7 +152,7 @@ class PlayerSprite: SKSpriteNode {
         })
     }
     
-    //put new code above ------------------------------------------------ignore methods below
+    //put new code above ------------------------------------------------ignore functions below
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

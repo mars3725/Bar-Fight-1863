@@ -17,8 +17,8 @@ class Button: SKLabelNode {
         override init(fontNamed fontName: String!) {
             super.init(fontNamed: fontName)
             self.text = "Hello, World!"
-            self.fontSize = 65;
-            self.position = CGPoint(x: 400, y: 500);
+            self.fontSize = 65
+            self.position = CGPoint(x: 400, y: 500)
         }
         
         required init(coder aDecoder: NSCoder) {

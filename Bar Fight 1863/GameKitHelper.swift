@@ -15,7 +15,17 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     var match = GKMatch?()
     var players = NSArray()
     var myRandomNumber = Int()
-    var lastpositionX = CGFloat()
+    
+    func getOtherPlayerAlias()->String {
+        if match?.players.first?.playerID == localPlayer.playerID {
+            return match!.players.last!.displayName!!
+        } else if match?.players.first?.playerID != localPlayer.playerID {
+            return match!.players.first!.displayName!!
+        } else {
+            println("Could not fetch other player's alias")
+            return "Error"
+        }
+    }
     //Authentication
     func authenticateLocalPlayer() -> NSString {
         var returnString = "Unknown"
@@ -78,7 +88,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     func match(match: GKMatch!, didReceiveData data: NSData!, fromRemotePlayer player: GKPlayer!) {
         var messageRecieved = NSKeyedUnarchiver.unarchiveObjectWithData(data) as Message
         if self.scene != nil {
-            switch (messageRecieved.type) {
+            switch messageRecieved.type {
             case .RandomNumberMessage:
                 let otherPlayersNumber = messageRecieved.content as Int
                 println("Random Number Recieved is: \(otherPlayersNumber)")
@@ -99,30 +109,34 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
                 break
                 
             case .EnemyStatusMessage:
-                let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as NSData) as? MyStats
+                let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as NSData) as? MyPositionInfo
                 
                 if let parentScene = self.scene as? GameScene {
                     let otherPlayer = parentScene.getOtherPlayer()
                     
                     otherPlayer.position = otherPlayersStats!.position
                     otherPlayer.physicsBody?.velocity = otherPlayersStats!.velocity
-                    if otherPlayersStats!.punching && !otherPlayer.punching { //more animations later
-                        otherPlayer.punch()
-                    }
-                    lastpositionX = otherPlayer.position.x
                     
                 }
                 break
-            case .EnemyFlipMessage:
+            case .SpecialFlagMessage:
                 if let parentScene = self.scene as? GameScene {
                     let otherPlayer = parentScene.getOtherPlayer()
-                    if otherPlayer.xScale.isSignMinus {
-                        otherPlayer.xScale = otherPlayer.scale
-                    } else if !otherPlayer.xScale.isSignMinus {
-                        otherPlayer.xScale = -otherPlayer.scale
+                    switch messageRecieved.content as String {
+                    case "Flip":
+                        if otherPlayer.xScale.isSignMinus {
+                            otherPlayer.xScale = otherPlayer.scale
+                        } else if !otherPlayer.xScale.isSignMinus {
+                            otherPlayer.xScale = -otherPlayer.scale
+                        }
+                        
+                    case "Punch":
+                        otherPlayer.punch()
+                        break
+                    default:
+                        break
                     }
                 }
-                break
             default:
                 break
             }
@@ -176,24 +190,39 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         let parentScene = self.scene as GameScene
         let player = parentScene.currentplayer
         
-        let unEncodedContent = MyStats(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
+        let unEncodedContent = MyPositionInfo(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
         messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
         
         let packet = NSKeyedArchiver.archivedDataWithRootObject(messageToSend)
         var error = NSErrorPointer()
-        match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Unreliable, error: error)
+        
+        if player?.physicsBody?.velocity != CGVector(dx: 0, dy: 0) {
+            match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Unreliable, error: error)
+        }
         if error != nil {
             println("error sending Position: \(error.debugDescription)")
         }
     }
     
     func sendFlipMessage() {
-        let message = Message(type: .EnemyFlipMessage)
+        let message = Message(type: .SpecialFlagMessage)
+        message.content = "Flip"
         let packet = NSKeyedArchiver.archivedDataWithRootObject(message)
         var error = NSErrorPointer()
         match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Reliable, error: error)
         if error != nil {
             println("error sending Flip Message: \(error.debugDescription)")
+        }
+    }
+    
+    func sendPunchMessage() {
+        let message = Message(type: .SpecialFlagMessage)
+        message.content = "Punch"
+        let packet = NSKeyedArchiver.archivedDataWithRootObject(message)
+        var error = NSErrorPointer()
+        match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Unreliable, error: error)
+        if error != nil {
+            println("error sending Punch Message: \(error.debugDescription)")
         }
     }
     
@@ -203,7 +232,7 @@ enum MessageType : String {
     case Default = "Default"
     case RandomNumberMessage = "RandomNumberMessage"
     case EnemyStatusMessage = "EnemyStatusMessage"
-    case EnemyFlipMessage = "EnemyFlipMessage"
+    case SpecialFlagMessage = "EnemyFlipMessage" //Either punch or texture flip
     init() {
         self = .Default
     }
@@ -224,7 +253,7 @@ class Message: NSObject, NSCoding {
     }
     
     init(type: MessageType) {
-        switch (type) {
+        switch type {
         case .RandomNumberMessage: // 302 Bytes
             self.type = MessageType.RandomNumberMessage
             content = Int(arc4random_uniform(1000000))
@@ -232,11 +261,11 @@ class Message: NSObject, NSCoding {
             
         case .EnemyStatusMessage: //762
             self.type = MessageType.EnemyStatusMessage
-            content = MyStats()
+            content = MyPositionInfo()
             break
-        case .EnemyFlipMessage:
-            self.type = MessageType.EnemyFlipMessage
-            content = nil
+        case .SpecialFlagMessage:
+            self.type = MessageType.SpecialFlagMessage
+            content = String()
             break
         default:
             break
@@ -244,15 +273,13 @@ class Message: NSObject, NSCoding {
     }
 }
 @objc
-class MyStats: NSObject, NSCoding {
+class MyPositionInfo: NSObject, NSCoding {
     var position = CGPoint()
-    var punching = Bool()
     var velocity = CGVector(dx: 0,dy: 0)
     
     init(position: CGPoint, velocity: CGVector, punching: Bool) { //jumping init
         self.position = position
         self.velocity = velocity
-        self.punching = punching
     }
     
     override init() {
@@ -261,13 +288,11 @@ class MyStats: NSObject, NSCoding {
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeCGPoint(position, forKey: "position")
-        aCoder.encodeBool(punching, forKey: "punching")
         aCoder.encodeCGVector(velocity, forKey: "velocity")
     }
     
     required init(coder aDecoder: NSCoder) {
         position = aDecoder.decodeCGPointForKey("position")
-        punching = aDecoder.decodeBoolForKey("punching")
         velocity = aDecoder.decodeCGVectorForKey("velocity")
         
     }

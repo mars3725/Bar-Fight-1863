@@ -20,6 +20,9 @@ public class GameScene: SKScene {
     let sendPositionFrequency = 0.05
     let punchButton = SKSpriteNode(imageNamed: "Button")
     let punchButton2 = SKSpriteNode(imageNamed: "Button")
+    var myNameLabel = SKLabelNode()
+    var enemyNameLabel = SKLabelNode()
+    
     override public func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
@@ -78,6 +81,7 @@ public class GameScene: SKScene {
                     }
                 }
             } else {
+                gamekithelper.sendPunchMessage()
                 currentplayer!.punch()
             }
         }
@@ -105,6 +109,8 @@ public class GameScene: SKScene {
         if currentplayer?.intersectsNode(otherPlayer) == true {
             attackCheck()
         }
+        myNameLabel.position = CGPointMake(currentplayer!.position.x, currentplayer!.frame.maxY + 10)
+        enemyNameLabel.position = CGPointMake(getOtherPlayer().position.x, getOtherPlayer().frame.maxY + 10)
     }
     
     func placePlayers() {
@@ -120,7 +126,21 @@ public class GameScene: SKScene {
         self.addChild(player1)
         self.addChild(player2)
         
-        self.currentplayer = playerArray.objectAtIndex(playerIndex) as? PlayerSprite
+        self.currentplayer = (playerArray.objectAtIndex(playerIndex) as PlayerSprite)
+        
+        myNameLabel.text = gamekithelper.localPlayer.displayName
+        myNameLabel.fontSize = 16
+        enemyNameLabel.text = gamekithelper.getOtherPlayerAlias()
+        enemyNameLabel.fontSize = 16
+        myNameLabel.position = CGPointMake(currentplayer!.position.x, currentplayer!.frame.maxY + 10)
+        enemyNameLabel.position = CGPointMake(getOtherPlayer().position.x, getOtherPlayer().frame.maxY + 10)
+        self.addChild(myNameLabel)
+        self.addChild(enemyNameLabel)
+        
+        self.runAction(SKAction.waitForDuration(2), completion: {
+            self.myNameLabel.runAction(SKAction.fadeAlphaTo(0, duration: 0.3), completion: {self.removeFromParent()})
+            self.enemyNameLabel.runAction(SKAction.fadeAlphaTo(0, duration: 0.3), completion: {self.removeFromParent()})
+        })
     }
     
     func attackCheck() {
@@ -160,7 +180,7 @@ public class GameScene: SKScene {
         noteText.alpha = 1
         noteText.text = text
         
-        self.runAction(SKAction.waitForDuration(2), completion: {
+        self.runAction(SKAction.waitForDuration(2.5), completion: {
             self.noteText.runAction(SKAction.fadeOutWithDuration(1))
         })
     }

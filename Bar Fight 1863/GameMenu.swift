@@ -12,7 +12,9 @@ import GameKit
 class GameMenu: SKScene {
     var playButton = Button(_text: "Play")
     var menuGameKitHelper = GameKitHelper()
-    var text = SKLabelNode(text: "")
+    var text = SKLabelNode()
+    let errorText = SKLabelNode(text: "You are not logged into Game Center. The show cannot go on. :(")
+    
     override func didMoveToView(view: SKView) {
         let background = SKSpriteNode(imageNamed: "Title")
         background.anchorPoint = CGPointZero
@@ -40,8 +42,18 @@ class GameMenu: SKScene {
                     menuGameKitHelper.findMatch()
                 } else {
                     println("Game Center is not enabled. Cannot Proceed, Goddamnit! Reason: \(authProbs)")
+                    errorText.fontSize = 16
+                    errorText.fontColor = SKColor.redColor()
+                    errorText.position = CGPointMake(self.frame.midX, self.frame.midY - 50)
+                    self.addChild(errorText)
                 }
             }
+        }
+    }
+    
+    override func update(currentTime: NSTimeInterval) {
+        if menuGameKitHelper.localPlayer.authenticated {
+            errorText.text = ""
         }
     }
     
