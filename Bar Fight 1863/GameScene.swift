@@ -62,7 +62,7 @@ public class GameScene: SKScene {
         
     }
     
-    override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override public func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         for touch: AnyObject in touches {
@@ -87,11 +87,11 @@ public class GameScene: SKScene {
         }
     }
     
-    override public func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    override public func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         
     }
     
-    override public func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override public func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         currentplayer!.move("stop")
     }
     
@@ -126,7 +126,7 @@ public class GameScene: SKScene {
         self.addChild(player1)
         self.addChild(player2)
         
-        self.currentplayer = (playerArray.objectAtIndex(playerIndex) as PlayerSprite)
+        self.currentplayer = (playerArray.objectAtIndex(playerIndex) as! PlayerSprite)
         
         myNameLabel.text = gamekithelper.localPlayer.displayName
         myNameLabel.fontSize = 16
@@ -170,15 +170,15 @@ public class GameScene: SKScene {
     
     func getOtherPlayer() -> PlayerSprite{
         if playerIndex == 0 {
-            return playerArray.objectAtIndex(1) as PlayerSprite
+            return playerArray.objectAtIndex(1) as! PlayerSprite
         } else {
-            return playerArray.objectAtIndex(0) as PlayerSprite
+            return playerArray.objectAtIndex(0) as! PlayerSprite
         }
     }
     
     func flashText(text: NSString) {
         noteText.alpha = 1
-        noteText.text = text
+        noteText.text = text as String //maybe text should be a string?
         
         self.runAction(SKAction.waitForDuration(2.5), completion: {
             self.noteText.runAction(SKAction.fadeOutWithDuration(1))

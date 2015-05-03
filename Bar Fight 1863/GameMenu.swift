@@ -32,7 +32,7 @@ class GameMenu: SKScene {
         self.addChild(playButton)
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
@@ -40,15 +40,17 @@ class GameMenu: SKScene {
                 let authProbs = menuGameKitHelper.authenticateLocalPlayer()
                 if menuGameKitHelper.localPlayer.authenticated {
                     menuGameKitHelper.findMatch()
+                    
                 } else {
-                    println("Game Center is not enabled. Cannot Proceed, Goddamnit! Reason: \(authProbs)")
+                    println("Game Center is not enabled. Cannot Proceed, Reason: \(authProbs)")
+                    errorText.fontName = "Helvetica-Bold"
                     errorText.fontSize = 16
                     errorText.fontColor = SKColor.redColor()
                     errorText.position = CGPointMake(self.frame.midX, self.frame.midY - 50)
                     self.addChild(errorText)
                 }
             }
-        }
+        } 
     }
     
     override func update(currentTime: NSTimeInterval) {
@@ -58,7 +60,7 @@ class GameMenu: SKScene {
     }
     
     func startGame(playerNumber: Int) {
-        var scene = GameScene(size: self.size, playerNumber: playerNumber,networkingController: menuGameKitHelper)
+        var scene = GameScene(size: self.size, playerNumber: playerNumber, networkingController: menuGameKitHelper)
         let skView = self.view!
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill

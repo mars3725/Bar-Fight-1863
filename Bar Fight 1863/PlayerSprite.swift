@@ -28,7 +28,7 @@ class PlayerSprite: SKSpriteNode {
             initTexture = SKTexture(imageNamed: "Abe_Punch_1")
             break
         case playerType.George:
-            initTexture = SKTexture(imageNamed: "George_Punch_1")
+            initTexture = SKTexture(imageNamed: "george") //George_Punch_1
             break
         default:
             break
@@ -43,22 +43,22 @@ class PlayerSprite: SKSpriteNode {
         case "left":
             
             let moveleft = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
-                let sprite = node as SKSpriteNode
+                let sprite = node as! SKSpriteNode
                 sprite.physicsBody?.applyForce(CGVectorMake(-self.playerSpeed, 0))
             })
             if !self.xScale.isSignMinus {
-                (self.scene as GameScene).gamekithelper.sendFlipMessage()
+                (self.scene as! GameScene).gamekithelper.sendFlipMessage()
                 self.xScale = -scale
             }
             self.runAction(SKAction.repeatActionForever(moveleft), withKey: "move left")
             break
         case "right":
             let moveright = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
-                let sprite = node as SKSpriteNode
+                let sprite = node as! SKSpriteNode
                 sprite.physicsBody?.applyForce(CGVectorMake(self.playerSpeed, 0))
             })
             if self.xScale.isSignMinus {
-                (self.scene as GameScene).gamekithelper.sendFlipMessage()
+                (self.scene as! GameScene).gamekithelper.sendFlipMessage()
                 self.xScale = scale
             }
             self.runAction(SKAction.repeatActionForever(moveright), withKey: "move right")
@@ -88,7 +88,7 @@ class PlayerSprite: SKSpriteNode {
         self.physicsBody?.collisionBitMask = 1
         self.physicsBody?.contactTestBitMask = 2
         self.physicsBody?.friction = 1
-        Animate(type)
+        //Animate(type)
     }
     
     func Animate(type: playerType) {
@@ -98,12 +98,12 @@ class PlayerSprite: SKSpriteNode {
         switch type {
         case playerType.Abe:
             Atlas = SKTextureAtlas(named: "Abe")
-            idleTextures = [Atlas.textureNamed("Abe_Idle_1.png"), Atlas.textureNamed("Abe_Idle_2.png"), Atlas.textureNamed("Abe_Idle_3.png"), Atlas.textureNamed("Abe_Idle_4.png")]
+            idleTextures = [Atlas.textureNamed("Idle1.png"), Atlas.textureNamed("Idle2.png"), Atlas.textureNamed("Idle3.png"), Atlas.textureNamed("Idle4.png")]
             PunchTextures = [SKTexture(imageNamed: "Abe_Punch_1"), SKTexture(imageNamed: "Abe_Punch_2")]
             break
         case playerType.George:
             Atlas = SKTextureAtlas(named: "George")
-            idleTextures = [Atlas.textureNamed("George_Idle_1.png"), Atlas.textureNamed("George_Idle_2.png"), Atlas.textureNamed("George_Idle_3.png"), Atlas.textureNamed("George_Idle_4.png")]
+            idleTextures = [Atlas.textureNamed("Idle1.png"), Atlas.textureNamed("Idle2.png"), Atlas.textureNamed("Idle3.png"), Atlas.textureNamed("Idle4.png")]
             PunchTextures = [SKTexture(imageNamed: "George_Punch_1"), SKTexture(imageNamed: "George_Punch_2")]
             break
         default:
@@ -116,13 +116,14 @@ class PlayerSprite: SKSpriteNode {
     }
     
     func punch() {
+        
         punching = true
         animationState = "punching"
         var punchVar = Int(arc4random_uniform(UInt32(PunchTextures.count)))
         let punchtextureArray = NSArray(array: PunchTextures)
         
         self.removeActionForKey("idle")
-        self.texture = punchtextureArray.objectAtIndex(punchVar) as? SKTexture
+        self.texture = punchtextureArray.firstObject as? SKTexture //replace firstObject with objectAtIndex(punchVar)
         self.runAction(SKAction.waitForDuration(0.5), completion: {
             self.runAction(SKAction.repeatActionForever(self.idle), withKey: "idle")
             self.punching = false
@@ -146,10 +147,11 @@ class PlayerSprite: SKSpriteNode {
                 skView?.ignoresSiblingOrder = true
                 scene.scaleMode = .ResizeFill
                 scene.size = skView!.bounds.size
-                (self.parent as GameScene).gamekithelper.match?.disconnect()
+                (self.parent as! GameScene).gamekithelper.match?.disconnect()
                 skView?.presentScene(scene, transition: SKTransition.fadeWithDuration(0.5))
             })
         })
+
     }
     
     //put new code above ------------------------------------------------ignore functions below

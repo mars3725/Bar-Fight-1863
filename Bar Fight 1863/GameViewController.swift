@@ -17,7 +17,7 @@ class GameViewController: UIViewController {
         let scene = GameMenu(size: self.view.bounds.size)
         
         // Configure the view.
-        let skView = self.view as SKView
+        let skView = self.view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.showsPhysics = false

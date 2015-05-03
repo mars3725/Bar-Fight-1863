@@ -17,9 +17,9 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     var myRandomNumber = Int()
     
     func getOtherPlayerAlias()->String {
-        if match?.players.first?.playerID == localPlayer.playerID {
+        if match?.players.first?.player == localPlayer.playerID {
             return match!.players.last!.displayName!!
-        } else if match?.players.first?.playerID != localPlayer.playerID {
+        } else if match?.players.first?.player != localPlayer.playerID {
             return match!.players.first!.displayName!!
         } else {
             println("Could not fetch other player's alias")
@@ -86,20 +86,20 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     //Data Transfer
     
     func match(match: GKMatch!, didReceiveData data: NSData!, fromRemotePlayer player: GKPlayer!) {
-        var messageRecieved = NSKeyedUnarchiver.unarchiveObjectWithData(data) as Message
+        var messageRecieved = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! Message
         if self.scene != nil {
             switch messageRecieved.type {
             case .RandomNumberMessage:
-                let otherPlayersNumber = messageRecieved.content as Int
+                let otherPlayersNumber = messageRecieved.content as! Int
                 println("Random Number Recieved is: \(otherPlayersNumber)")
                 println("My Random Number is: \(myRandomNumber)")
                 if myRandomNumber > otherPlayersNumber {
                     println("I am player 1")
-                    let parentScene = self.scene as GameMenu
+                    let parentScene = self.scene as! GameMenu
                     parentScene.startGame(0)
                 } else if myRandomNumber < otherPlayersNumber {
                     println("I am player 2")
-                    let parentScene = self.scene as GameMenu
+                    let parentScene = self.scene as! GameMenu
                     parentScene.startGame(1)
                 } else {
                     //try again
@@ -109,7 +109,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
                 break
                 
             case .EnemyStatusMessage:
-                let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as NSData) as? MyPositionInfo
+                let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as! NSData) as? MyPositionInfo
                 
                 if let parentScene = self.scene as? GameScene {
                     let otherPlayer = parentScene.getOtherPlayer()
@@ -122,7 +122,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
             case .SpecialFlagMessage:
                 if let parentScene = self.scene as? GameScene {
                     let otherPlayer = parentScene.getOtherPlayer()
-                    switch messageRecieved.content as String {
+                    switch messageRecieved.content as! String {
                     case "Flip":
                         if otherPlayer.xScale.isSignMinus {
                             otherPlayer.xScale = otherPlayer.scale
@@ -152,7 +152,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         //self.skView?.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill
         //scene.size = skView!.bounds.size
-        (self.parent as GameScene).gamekithelper.match?.disconnect()
+        (self.parent as! GameScene).gamekithelper.match?.disconnect()
         self.scene!.view!.presentScene(scene, transition: SKTransition.fadeWithDuration(0.5))
     }
     
@@ -163,7 +163,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
             //self.skView?.ignoresSiblingOrder = true
             scene.scaleMode = .ResizeFill
             //scene.size = skView!.bounds.size
-            (self.parent as GameScene).gamekithelper.match?.disconnect()
+            (self.parent as! GameScene).gamekithelper.match?.disconnect()
             if self.scene!.view != nil {
                 self.scene!.view!.presentScene(scene, transition: SKTransition.fadeWithDuration(0.5))
             }
@@ -172,7 +172,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     
     func sendRandomNumber() {
         var messageToSend = Message(type: .RandomNumberMessage)
-        myRandomNumber = messageToSend.content as Int //Keeps Number For Later Comparison
+        myRandomNumber = messageToSend.content as! Int //Keeps Number For Later Comparison
         
         let packet = NSKeyedArchiver.archivedDataWithRootObject(messageToSend)
         var error = NSErrorPointer()
@@ -187,7 +187,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     
     func sendPosition() {
         var messageToSend = Message(type: .EnemyStatusMessage)
-        let parentScene = self.scene as GameScene
+        let parentScene = self.scene as! GameScene
         let player = parentScene.currentplayer
         
         let unEncodedContent = MyPositionInfo(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
@@ -237,6 +237,7 @@ enum MessageType : String {
         self = .Default
     }
 }
+
 @objc
 class Message: NSObject, NSCoding {
     var type = MessageType()
@@ -249,7 +250,7 @@ class Message: NSObject, NSCoding {
     
     required init(coder aDecoder: NSCoder) {
         content = aDecoder.decodeObjectForKey("content")
-        type = MessageType(rawValue: (aDecoder.decodeObjectForKey("type") as String))!
+        type = MessageType(rawValue: (aDecoder.decodeObjectForKey("type") as! String))!
     }
     
     init(type: MessageType) {
@@ -258,8 +259,7 @@ class Message: NSObject, NSCoding {
             self.type = MessageType.RandomNumberMessage
             content = Int(arc4random_uniform(1000000))
             break
-            
-        case .EnemyStatusMessage: //762
+        case .EnemyStatusMessage: //762 Bytes
             self.type = MessageType.EnemyStatusMessage
             content = MyPositionInfo()
             break
@@ -272,6 +272,7 @@ class Message: NSObject, NSCoding {
         }
     }
 }
+
 @objc
 class MyPositionInfo: NSObject, NSCoding {
     var position = CGPoint()
