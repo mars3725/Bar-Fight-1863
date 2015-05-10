@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
         
             var view = self.window!.rootViewController!.view as! SKView
-            view.paused = true; //set back to false to unpause
+            view.paused = true;
             println("Game entered background");
             
     }
