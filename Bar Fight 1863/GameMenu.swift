@@ -13,7 +13,7 @@ class GameMenu: SKScene {
     var playButton = Button(_text: "Play")
     var menuGameKitHelper = GameKitHelper()
     var text = SKLabelNode()
-    let errorText = SKLabelNode(text: "You are not logged into Game Center. The show cannot go on. :(")
+    let errorText = SKLabelNode(text: "Can't connect to Game Center. Have you tried turning it off and on again?")
     
     override func didMoveToView(view: SKView) {
         let background = SKSpriteNode(imageNamed: "Title")
@@ -36,18 +36,18 @@ class GameMenu: SKScene {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
-            if self.containsPoint(location){
-                let authProbs = menuGameKitHelper.authenticateLocalPlayer()
+            if playButton.containsPoint(location){
+                menuGameKitHelper.authenticateLocalPlayer()
                 if menuGameKitHelper.localPlayer.authenticated {
                     menuGameKitHelper.findMatch()
                     
                 } else {
-                    println("Game Center is not enabled. Cannot Proceed, Reason: \(authProbs)")
-                    errorText.fontName = "Helvetica-Bold"
-                    errorText.fontSize = 16
-                    errorText.fontColor = SKColor.redColor()
+                    println("Game Center is not enabled. Cannot Proceed")
+                    errorText.fontName = "Helvetica"
+                    errorText.fontSize = 18
+                    errorText.fontColor = SKColor.whiteColor()
                     errorText.position = CGPointMake(self.frame.midX, self.frame.midY - 50)
-                    self.addChild(errorText)
+                    if errorText.parent == nil {self.addChild(errorText)}
                 }
             }
         } 

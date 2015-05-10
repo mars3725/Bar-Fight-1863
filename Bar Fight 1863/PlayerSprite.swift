@@ -28,7 +28,7 @@ class PlayerSprite: SKSpriteNode {
             initTexture = SKTexture(imageNamed: "Abe_Punch_1")
             break
         case playerType.George:
-            initTexture = SKTexture(imageNamed: "george") //George_Punch_1
+            initTexture = SKTexture(imageNamed: "George_Punch_1")
             break
         default:
             break

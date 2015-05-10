@@ -27,7 +27,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         }
     }
     //Authentication
-    func authenticateLocalPlayer() -> NSString {
+    func authenticateLocalPlayer(){
         var returnString = "Unknown"
         localPlayer.authenticateHandler = {(_viewController : UIViewController!, error : NSError!) -> Void in
             
@@ -35,19 +35,14 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
                 let viewController = self.scene?.view?.window?.rootViewController
                 viewController?.presentViewController(_viewController, animated: true, completion: nil)
                 self.GameCenterEnabled = true
-                returnString = "Sucess. Player Logged in!"
-                
             }
             else if self.localPlayer.authenticated {
                 self.GameCenterEnabled = true
-                returnString = "Sucess. Player Already Logged in"
             }
             else {
                 self.GameCenterEnabled = false
-                returnString = "Faliure. \(error.localizedDescription)"
             }
         }
-        return returnString
     }
     
     //Find Match
