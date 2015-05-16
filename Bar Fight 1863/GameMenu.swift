@@ -11,7 +11,6 @@ import GameKit
 
 class GameMenu: SKScene {
     var playButton = Button(_text: "Play")
-    var menuGameKitHelper = GameKitHelper()
     var text = SKLabelNode()
     let errorText = SKLabelNode(text: "Can't connect to Game Center. Have you tried turning it off and on again?")
     
@@ -20,15 +19,13 @@ class GameMenu: SKScene {
         background.anchorPoint = CGPointZero
         background.size = self.size
         background.position = CGPointZero
-        
+        centralGameKitHelper.baseScene = self
         
         playButton.position = CGPointMake(self.frame.midX, self.frame.midY)
         self.addChild(background)
         text.position = CGPointMake(self.frame.midX, self.frame.minY + 50)
         self.addChild(text)
         typeText()
-        self.addChild(menuGameKitHelper)
-        menuGameKitHelper.authenticateLocalPlayer()
         self.addChild(playButton)
     }
     
@@ -37,11 +34,11 @@ class GameMenu: SKScene {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if playButton.containsPoint(location){
-                menuGameKitHelper.authenticateLocalPlayer()
-                if menuGameKitHelper.localPlayer.authenticated {
-                    menuGameKitHelper.findMatch()
+                if centralGameKitHelper.localPlayer.authenticated {
+                    centralGameKitHelper.findMatch()
                     
                 } else {
+                    centralGameKitHelper.authenticateLocalPlayer()
                     println("Game Center is not enabled. Cannot Proceed")
                     errorText.fontName = "Helvetica"
                     errorText.fontSize = 18
@@ -54,13 +51,13 @@ class GameMenu: SKScene {
     }
     
     override func update(currentTime: NSTimeInterval) {
-        if menuGameKitHelper.localPlayer.authenticated {
-            errorText.text = ""
+        if centralGameKitHelper.localPlayer.authenticated {
+            errorText.removeFromParent()
         }
     }
     
-    func startGame(playerNumber: Int) {
-        var scene = GameScene(size: self.size, playerNumber: playerNumber, networkingController: menuGameKitHelper)
+    func startGame() {
+        var scene = GameScene(size: self.size)
         let skView = self.view!
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill

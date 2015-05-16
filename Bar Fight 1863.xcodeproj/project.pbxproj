@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08082F6519EF7C0000981DFA /* Abe.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08082F6419EF7C0000981DFA /* Abe.atlas */; };
-		08082F6619EF7C0000981DFA /* Abe.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08082F6419EF7C0000981DFA /* Abe.atlas */; };
+		0824B96D1B072368009680F6 /* Abe.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 0824B96B1B072368009680F6 /* Abe.atlas */; };
+		0824B96E1B072368009680F6 /* George.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 0824B96C1B072368009680F6 /* George.atlas */; };
 		0837FEBD19E229DD00F835E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEBC19E229DD00F835E7 /* AppDelegate.swift */; };
 		0837FEC119E229DD00F835E7 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC019E229DD00F835E7 /* GameScene.swift */; };
 		0837FEC319E229DE00F835E7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC219E229DE00F835E7 /* GameViewController.swift */; };
@@ -31,8 +31,6 @@
 		08B48C1019FDD50900C4357E /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEC219E229DE00F835E7 /* GameViewController.swift */; };
 		08B48C1119FDD51000C4357E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0837FEBC19E229DD00F835E7 /* AppDelegate.swift */; };
 		08B48C1219FDD52500C4357E /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0837FEEA19E22D4600F835E7 /* GameKit.framework */; };
-		08FA79A419E8ECE8001A8EED /* George.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08FA79A319E8ECE8001A8EED /* George.atlas */; };
-		08FA79A519E8ECE8001A8EED /* George.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 08FA79A319E8ECE8001A8EED /* George.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		08082F6419EF7C0000981DFA /* Abe.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Abe.atlas; sourceTree = "<group>"; };
+		0824B96B1B072368009680F6 /* Abe.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Abe.atlas; sourceTree = "<group>"; };
+		0824B96C1B072368009680F6 /* George.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = George.atlas; sourceTree = "<group>"; };
 		0837FEB719E229DD00F835E7 /* Bar Fight 1863.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bar Fight 1863.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0837FEBB19E229DD00F835E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0837FEBC19E229DD00F835E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -67,7 +66,6 @@
 		0856CD5419FD714400BC83EB /* GameMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameMenu.swift; sourceTree = "<group>"; };
 		0856CD5719FD71A700BC83EB /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		086332C219FC8EF600B1C011 /* GameKitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameKitHelper.swift; sourceTree = "<group>"; };
-		08FA79A319E8ECE8001A8EED /* George.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = George.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,8 +156,8 @@
 			isa = PBXGroup;
 			children = (
 				0837FEC719E229DE00F835E7 /* Images.xcassets */,
-				08FA79A319E8ECE8001A8EED /* George.atlas */,
-				08082F6419EF7C0000981DFA /* Abe.atlas */,
+				0824B96B1B072368009680F6 /* Abe.atlas */,
+				0824B96C1B072368009680F6 /* George.atlas */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -260,8 +258,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08082F6519EF7C0000981DFA /* Abe.atlas in Resources */,
-				08FA79A419E8ECE8001A8EED /* George.atlas in Resources */,
+				0824B96E1B072368009680F6 /* George.atlas in Resources */,
+				0824B96D1B072368009680F6 /* Abe.atlas in Resources */,
 				0837FECB19E229DE00F835E7 /* LaunchScreen.xib in Resources */,
 				0837FEC819E229DE00F835E7 /* Images.xcassets in Resources */,
 				0837FEC619E229DE00F835E7 /* Main.storyboard in Resources */,
@@ -272,8 +270,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08082F6619EF7C0000981DFA /* Abe.atlas in Resources */,
-				08FA79A519E8ECE8001A8EED /* George.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,79 +8,28 @@
 
 import SpriteKit
 
+enum actions: String {
+    case left = "left", right = "right", up = "up", punch = "punch", stop = "stop", animate = "animate"}
+
 class PlayerSprite: SKSpriteNode {
     
-    enum playerType: Int {
-        case Abe = 1, George }
-    let playerSpeed: CGFloat = 180
-    var PunchTextures = [SKTexture]()
-    var idle = SKAction()
-    let scale:CGFloat = 1.5
+    enum playerType: String {
+        case Abe = "Abe", George = "George" }
+    let playerSpeed: CGFloat = 200
+    var punchTexture = SKTexture()
+    var run = SKAction()
+    let scale:CGFloat = 0.5
     var jumping = false
     var punching = false
-    var animationState = String()
+    var defaultTexture = SKTexture()
+    var jumpTexture = SKTexture()
     
     convenience init(type: playerType) {
-        var initTexture = SKTexture()
+        var initTexture = SKTextureAtlas(named: "\(type.rawValue)").textureNamed("\(type.rawValue)Run3")
+        self.init(texture: initTexture, color: UIColor(), size: initTexture.size())
         
-        switch type {
-        case playerType.Abe:
-            initTexture = SKTexture(imageNamed: "Abe_Punch_1")
-            break
-        case playerType.George:
-            initTexture = SKTexture(imageNamed: "George_Punch_1")
-            break
-        default:
-            break
-        } //sets initial texture
-        
-        self.init(texture: initTexture, color: UIColor(), size: CGSize())
-        setProperties(type)
-    }
-    
-    func move(direction: NSString) {
-        switch direction {
-        case "left":
-            
-            let moveleft = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
-                let sprite = node as! SKSpriteNode
-                sprite.physicsBody?.applyForce(CGVectorMake(-self.playerSpeed, 0))
-            })
-            if !self.xScale.isSignMinus {
-                (self.scene as! GameScene).gamekithelper.sendFlipMessage()
-                self.xScale = -scale
-            }
-            self.runAction(SKAction.repeatActionForever(moveleft), withKey: "move left")
-            break
-        case "right":
-            let moveright = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
-                let sprite = node as! SKSpriteNode
-                sprite.physicsBody?.applyForce(CGVectorMake(self.playerSpeed, 0))
-            })
-            if self.xScale.isSignMinus {
-                (self.scene as! GameScene).gamekithelper.sendFlipMessage()
-                self.xScale = scale
-            }
-            self.runAction(SKAction.repeatActionForever(moveright), withKey: "move right")
-            break
-        case "up":
-            if !jumping {
-                self.physicsBody?.applyImpulse(CGVectorMake(0, 100))
-                jumping = true
-            }
-            break
-        case "stop":
-            self.removeActionForKey("move left")
-            self.removeActionForKey("move right")
-            break
-        default:
-            break
-        }
-    }
-    
-    func setProperties(type: playerType) {
         self.setScale(scale)
-        self.name = "\(type.hashValue)"
+        self.name = "\(type.rawValue)"
         self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
         self.physicsBody?.restitution = 0
         self.physicsBody?.allowsRotation = false
@@ -88,53 +37,91 @@ class PlayerSprite: SKSpriteNode {
         self.physicsBody?.collisionBitMask = 1
         self.physicsBody?.contactTestBitMask = 2
         self.physicsBody?.friction = 1
-        //Animate(type)
+        self.physicsBody?.linearDamping = 1
+        
+        var runTextures = [SKTexture]()
+        let Atlas = SKTextureAtlas(named: "\(type.rawValue)")
+        runTextures = [Atlas.textureNamed("\(type.rawValue)Run1.png"), Atlas.textureNamed("\(type.rawValue)Run2.png"), Atlas.textureNamed("\(type.rawValue)Run1.png"), Atlas.textureNamed("\(type.rawValue)Run3.png")]
+        punchTexture = Atlas.textureNamed("\(type.rawValue)Punch")
+        defaultTexture = Atlas.textureNamed("\(type.rawValue)Run3")
+        jumpTexture = Atlas.textureNamed("\(type.rawValue)Run2")
+        
+        run = SKAction.repeatActionForever(SKAction.animateWithTextures(runTextures, timePerFrame: 0.1))
     }
     
-    func Animate(type: playerType) {
-        
-        var idleTextures = [SKTexture]()
-        var Atlas = SKTextureAtlas()
-        switch type {
-        case playerType.Abe:
-            Atlas = SKTextureAtlas(named: "Abe")
-            idleTextures = [Atlas.textureNamed("Idle1.png"), Atlas.textureNamed("Idle2.png"), Atlas.textureNamed("Idle3.png"), Atlas.textureNamed("Idle4.png")]
-            PunchTextures = [SKTexture(imageNamed: "Abe_Punch_1"), SKTexture(imageNamed: "Abe_Punch_2")]
+    func action(action: actions) {
+        switch action {
+        case .left:
+            let moveleft = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
+                let sprite = node as! SKSpriteNode
+                sprite.physicsBody?.applyForce(CGVectorMake(-self.playerSpeed, 0))
+            })
+            if !self.xScale.isSignMinus {
+                centralGameKitHelper.sendFlipMessage()
+                self.xScale = -scale
+            }
+            self.runAction(SKAction.repeatActionForever(moveleft), withKey: action.rawValue)
+            self.runAction(run, withKey: actions.animate.rawValue)
             break
-        case playerType.George:
-            Atlas = SKTextureAtlas(named: "George")
-            idleTextures = [Atlas.textureNamed("Idle1.png"), Atlas.textureNamed("Idle2.png"), Atlas.textureNamed("Idle3.png"), Atlas.textureNamed("Idle4.png")]
-            PunchTextures = [SKTexture(imageNamed: "George_Punch_1"), SKTexture(imageNamed: "George_Punch_2")]
+            
+        case .right:
+            let moveright = SKAction.customActionWithDuration(0.05, actionBlock: { (node: SKNode!, CGFloat) -> Void in
+                let sprite = node as! SKSpriteNode
+                sprite.physicsBody?.applyForce(CGVectorMake(self.playerSpeed, 0))
+            })
+            if self.xScale.isSignMinus {
+                centralGameKitHelper.sendFlipMessage()
+                self.xScale = scale
+            }
+            self.runAction(SKAction.repeatActionForever(moveright), withKey: action.rawValue)
+            self.runAction(run, withKey: actions.animate.rawValue)
             break
+            
+        case .up:
+            println(self.physicsBody?.velocity.dy)
+            if self.physicsBody?.velocity.dy < 5 {
+                let velocity: CGFloat = 300/0.5
+                let impluse = CGVectorMake(0, self.physicsBody!.mass * velocity)
+                self.physicsBody?.applyImpulse(impluse)
+                if self.physicsBody?.velocity.dx != 0 {
+                    self.texture = jumpTexture
+                }
+            } 
+            break
+            
+        case .punch:
+            punching = true
+            self.removeActionForKey(actions.animate.rawValue)
+            self.texture = punchTexture
+            self.runAction(SKAction.waitForDuration(0.5), completion: {
+            self.punching = false
+            })
+            break
+            
+        case .stop:
+            if self.physicsBody!.velocity.dx.isSignMinus {
+                self.physicsBody?.applyForce(CGVectorMake(playerSpeed * 0.75, 0))
+            } else {
+                self.physicsBody?.applyForce(CGVectorMake(-playerSpeed * 0.75, 0))
+            }
+            
+            self.removeActionForKey(actions.left.rawValue)
+            self.removeActionForKey(actions.right.rawValue)
+            self.removeActionForKey(actions.animate.rawValue)
+            self.texture = defaultTexture
+            
+            break
+            
         default:
             break
-        } //load texture atlases and setup texture arrays (idle & punch)
-        
-        idle = SKAction.animateWithTextures(idleTextures, timePerFrame: 0.2)
-        animationState = "idle"
-        self.runAction(SKAction.repeatActionForever(idle), withKey: "idle")
-    }
-    
-    func punch() {
-        
-        punching = true
-        animationState = "punching"
-        var punchVar = Int(arc4random_uniform(UInt32(PunchTextures.count)))
-        let punchtextureArray = NSArray(array: PunchTextures)
-        
-        self.removeActionForKey("idle")
-        self.texture = punchtextureArray.firstObject as? SKTexture //replace firstObject with objectAtIndex(punchVar)
-        self.runAction(SKAction.waitForDuration(0.5), completion: {
-            self.runAction(SKAction.repeatActionForever(self.idle), withKey: "idle")
-            self.punching = false
-        })
+        }
     }
     
     func die(draw: Bool, hitFromDirection direction: NSString) {
         let skView = self.scene?.view
         
         self.physicsBody?.allowsRotation = true
-        self.removeActionForKey("idle")
+        self.removeAllActions()
         var angle = CGFloat()
         if direction == "right" {
             angle = CGFloat(-M_PI_2)
@@ -147,11 +134,10 @@ class PlayerSprite: SKSpriteNode {
                 skView?.ignoresSiblingOrder = true
                 scene.scaleMode = .ResizeFill
                 scene.size = skView!.bounds.size
-                (self.parent as! GameScene).gamekithelper.match?.disconnect()
+                centralGameKitHelper.match?.disconnect()
                 skView?.presentScene(scene, transition: SKTransition.fadeWithDuration(0.5))
             })
         })
-
     }
     
     //put new code above ------------------------------------------------ignore functions below
