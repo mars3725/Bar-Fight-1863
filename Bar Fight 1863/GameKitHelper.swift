@@ -104,23 +104,18 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
             }
             break
             
-        case .EnemyStatusMessage:
+        case .XPositionMessage:
             let otherPlayersStats = NSKeyedUnarchiver.unarchiveObjectWithData(messageRecieved.content as! NSData) as? MyPositionInfo
             
             if let parentScene = baseScene as? GameScene {
                 let otherPlayer = parentScene.getOtherPlayer()
                 
-                otherPlayer.position = otherPlayersStats!.position
-                otherPlayer.physicsBody?.velocity = otherPlayersStats!.velocity
-                if otherPlayersStats!.velocity.dx == 0 {
-                    otherPlayer.action(actions.stop)
-                } else if otherPlayer.actionForKey(actions.animate.rawValue as String) == nil {
-                    otherPlayer.action(actions.animate)
-                }
-                
+                otherPlayer.position.x = CGFloat(otherPlayersStats!.position)
+                otherPlayer.physicsBody!.velocity.dx = CGFloat(otherPlayersStats!.velocity)
+                otherPlayer.action(.animate)
             }
             break
-        case .SpecialFlagMessage:
+        case .SpecialMessage:
             if let parentScene = baseScene as? GameScene {
                 let otherPlayer = parentScene.getOtherPlayer()
                 switch messageRecieved.content as! String {
@@ -132,12 +127,16 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
                     }
                     
                 case "Punch":
-                    otherPlayer.action(actions.punch)
+                    otherPlayer.action(.punch)
+                    break
+                case "Jump":
+                    otherPlayer.action(.up)
                     break
                 default:
                     break
                 }
             }
+            
         default:
             break
         }
@@ -182,19 +181,16 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     }
     
     func sendPosition() {
-        var messageToSend = Message(type: .EnemyStatusMessage)
+        var messageToSend = Message(type: .XPositionMessage)
         if let parentScene = baseScene as? GameScene {
-            let player = parentScene.currentplayer
             
-            let unEncodedContent = MyPositionInfo(position: player!.position, velocity: player!.physicsBody!.velocity, punching: player!.punching)
+            let unEncodedContent = MyPositionInfo(xPosition: parentScene.currentplayer!.position.x, xVelocity: parentScene.currentplayer!.physicsBody!.velocity.dx)
             messageToSend.content = NSKeyedArchiver.archivedDataWithRootObject(unEncodedContent)
             
             let packet = NSKeyedArchiver.archivedDataWithRootObject(messageToSend)
             var error = NSErrorPointer()
             
-            if player?.physicsBody?.velocity != CGVector(dx: 0, dy: 0) {
                 match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Unreliable, error: error)
-            }
             if error != nil {
                 println("error sending Position: \(error.debugDescription)")
             }
@@ -202,7 +198,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     }
     
     func sendFlipMessage() {
-        let message = Message(type: .SpecialFlagMessage)
+        let message = Message(type: .SpecialMessage)
         message.content = "Flip"
         let packet = NSKeyedArchiver.archivedDataWithRootObject(message)
         var error = NSErrorPointer()
@@ -213,7 +209,7 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
     }
     
     func sendPunchMessage() {
-        let message = Message(type: .SpecialFlagMessage)
+        let message = Message(type: .SpecialMessage)
         message.content = "Punch"
         let packet = NSKeyedArchiver.archivedDataWithRootObject(message)
         var error = NSErrorPointer()
@@ -223,13 +219,24 @@ class GameKitHelper: SKNode, GKMatchmakerViewControllerDelegate, GKMatchDelegate
         }
     }
     
+    func sendJumpMessage() {
+        let message = Message(type: .SpecialMessage)
+        message.content = "Jump"
+        let packet = NSKeyedArchiver.archivedDataWithRootObject(message)
+        var error = NSErrorPointer()
+        match?.sendDataToAllPlayers(packet, withDataMode: GKMatchSendDataMode.Unreliable, error: error)
+        if error != nil {
+            println("error sending Jump Message: \(error.debugDescription)")
+        }
+    }
+    
 }
 
 enum MessageType : String {
     case Default = "Default"
     case RandomNumberMessage = "RandomNumberMessage"
-    case EnemyStatusMessage = "EnemyStatusMessage"
-    case SpecialFlagMessage = "EnemyFlipMessage" //Either punch or texture flip
+    case XPositionMessage = "XPositionMessage"
+    case SpecialMessage = "SpecialMessage"
     init() {
         self = .Default
     }
@@ -256,12 +263,12 @@ class Message: NSObject, NSCoding {
             self.type = MessageType.RandomNumberMessage
             content = UInt(arc4random_uniform(1000000))
             break
-        case .EnemyStatusMessage: //762 Bytes
-            self.type = MessageType.EnemyStatusMessage
+        case .XPositionMessage:
+            self.type = MessageType.XPositionMessage
             content = MyPositionInfo()
             break
-        case .SpecialFlagMessage:
-            self.type = MessageType.SpecialFlagMessage
+        case .SpecialMessage:
+            self.type = MessageType.SpecialMessage
             content = String()
             break
         default:
@@ -273,12 +280,12 @@ class Message: NSObject, NSCoding {
 
 @objc
 class MyPositionInfo: NSObject, NSCoding {
-    var position = CGPoint()
-    var velocity = CGVector(dx: 0,dy: 0)
+    var position = Float()
+    var velocity = Float()
     
-    init(position: CGPoint, velocity: CGVector, punching: Bool) { //jumping init
-        self.position = position
-        self.velocity = velocity
+    init(xPosition: CGFloat, xVelocity: CGFloat) { //jumping init
+        self.position = Float(xPosition)
+        self.velocity = Float(xVelocity)
     }
     
     override init() {
@@ -286,13 +293,13 @@ class MyPositionInfo: NSObject, NSCoding {
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeCGPoint(position, forKey: "position")
-        aCoder.encodeCGVector(velocity, forKey: "velocity")
+        aCoder.encodeFloat(position, forKey: "position")
+        aCoder.encodeFloat(velocity, forKey: "velocity")
     }
     
     required init(coder aDecoder: NSCoder) {
-        position = aDecoder.decodeCGPointForKey("position")
-        velocity = aDecoder.decodeCGVectorForKey("velocity")
+        position = aDecoder.decodeFloatForKey("position")
+        velocity = aDecoder.decodeFloatForKey("velocity")
         
     }
 }

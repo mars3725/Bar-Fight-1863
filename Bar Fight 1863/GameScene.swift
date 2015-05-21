@@ -40,6 +40,7 @@ public class GameScene: SKScene {
         stage.physicsBody?.categoryBitMask = 1
         stage.physicsBody?.restitution = 0
         stage.physicsBody?.density = 1.5
+        stage.physicsBody?.friction = 0.4
         stage.physicsBody?.allowsRotation = false
         
         crowd.setScale(0.4)
@@ -63,7 +64,7 @@ public class GameScene: SKScene {
         self.physicsBody?.friction = 0.4
         self.physicsWorld.gravity = CGVectorMake(0, -8.5)
         
-        noteText.fontName = "Futura-CondensedExtraBold"
+        noteText.fontName = "Futura"
         noteText.fontColor = SKColor.redColor()
         noteText.fontSize = 60
         noteText.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMaxY(self.frame)-50)
@@ -79,7 +80,7 @@ public class GameScene: SKScene {
         
         self.flashText("FIGHT!")
         sendPlayerStats()
-        animateCrowd()
+        //animateCrowd()
     }
     
     func animateCrowd() {
@@ -103,18 +104,19 @@ public class GameScene: SKScene {
             
             if !punchButton.containsPoint(location) && !punchButton2.containsPoint(location) {
                 if location.y > self.frame.height * 0.6 {
-                    currentplayer!.action(actions.up)
+                    currentplayer!.action(.up)
+                    centralGameKitHelper.sendJumpMessage()
                 } else {
                     if location.x < self.frame.width/2 {
-                        currentplayer!.action(actions.left)
+                        currentplayer!.action(.left)
                     }
                     else if location.x > self.frame.width/2 {
-                        currentplayer!.action(actions.right)
+                        currentplayer!.action(.right)
                     }
                 }
             } else {
                 centralGameKitHelper.sendPunchMessage()
-                currentplayer!.action(actions.punch)
+                currentplayer!.action(.punch)
                 
                 crowd.texture = SKTexture(imageNamed: "CrowdCheer")
                 self.runAction(SKAction.waitForDuration(1), completion: {
@@ -125,7 +127,7 @@ public class GameScene: SKScene {
     }
     
     override public func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        currentplayer!.action(actions.stop)
+        currentplayer!.action(.stop)
     }
     
     override public func update(currentTime: CFTimeInterval) {
@@ -135,6 +137,9 @@ public class GameScene: SKScene {
         }
         myNameLabel.position = CGPointMake(currentplayer!.position.x, currentplayer!.frame.maxY + 10)
         enemyNameLabel.position = CGPointMake(getOtherPlayer().position.x, getOtherPlayer().frame.maxY + 10)
+        if abs(getOtherPlayer().physicsBody!.velocity.dy) < 5 {
+            getOtherPlayer().texture = getOtherPlayer().defaultTexture
+        }
     }
     
     func placePlayers() {

@@ -78,8 +78,7 @@ class PlayerSprite: SKSpriteNode {
             break
             
         case .up:
-            println(self.physicsBody?.velocity.dy)
-            if self.physicsBody?.velocity.dy < 5 {
+            if  abs(self.physicsBody!.velocity.dy) < 5 {
                 let velocity: CGFloat = 300/0.5
                 let impluse = CGVectorMake(0, self.physicsBody!.mass * velocity)
                 self.physicsBody?.applyImpulse(impluse)
